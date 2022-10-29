@@ -26,7 +26,7 @@ ENV NODE_ENV=${NODE_ENV}
 # Set work dir
 WORKDIR /ner/src/app
 
-COPY --from=development /ner/src/app/
+COPY --from=development /thomas/src/app/ .
 
 EXPOSE 3000
 
