@@ -9,14 +9,20 @@ WORKDIR /ner/src/app
 COPY package*.json ./
 
 # Install deps inside container
-RUN npm Install
+RUN npm install
 
-RUN npm run build
+
 
 EXPOSE 3000
 
-#########
+
+
+COPY . .
+
+RUN npm run build
+################
 ## PRODUCTION ##
+################
 # Build another image named production
 FROM node:14 AS production
 
@@ -26,7 +32,7 @@ ENV NODE_ENV=${NODE_ENV}
 # Set work dir
 WORKDIR /ner/src/app
 
-COPY --from=development /thomas/src/app/ .
+COPY --from=development /ner/src/app/ .
 
 EXPOSE 3000
 
