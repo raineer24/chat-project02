@@ -7,18 +7,23 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { Observable, of } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { CreateUserDto } from '../model/dto/create-user.dto';
+import { UserHelperService } from '../service/user-helper/user-helper.service';
 import { UserService } from '../service/user-service/user.service';
 
 @Controller('users')
 export class UserController {
-
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private userHelperService: UserHelperService,
+  ) {}
 
   @Post()
   create(@Body() createUserDto: CreateUserDto): Observable<boolean> {
-    return of(true);
+    return this.userHelperService.createUserDtoEntity(createUserDto).pipe(
+      switchMap((user: UserI) => this.userService.create())
+    )
   }
 
   // @Get()
