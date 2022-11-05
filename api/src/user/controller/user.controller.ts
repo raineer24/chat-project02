@@ -7,6 +7,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { Pagination } from 'nestjs-typeorm-paginate';
 import { Observable, of, switchMap, from } from 'rxjs';
 import { CreateUserDto } from '../model/dto/create-user.dto';
 import { UserI } from '../model/user.interface';
@@ -20,40 +21,23 @@ export class UserController {
     private userHelperService: UserHelperService,
   ) {}
 
-  // @Post()
-  // create(@Body() createUserDto: CreateUserDto): Observable<UserI> {
-  //   return this.userHelperService
-  //     .createUserDtoEntity(createUserDto)
-  //     .pipe(switchMap((user: UserI) => this.userService.create(user)));
-  // }
-
   @Post()
   async create(@Body() createUserDto: CreateUserDto): Promise<UserI> {
     const userEntity: UserI =
-      this.userHelperService.createUserDtoToEntity(createUserDto);
+      this.userHelperService.createUserDtoEntity(createUserDto);
     return this.userService.create(userEntity);
   }
 
-  // @Post()
-  // create(@Body() createUserDto: CreateUserDto): Observable<UserI> {
-  //   return this.userHelperService
-  //     .createUserDtoEntity(createUserDto)
-  //     .pipe(switchMap((user: UserI) => this.userService.create(user)));
-  // }
-
-  // return from(this.userRepository.findOne({ email })).pipe(
-  //   map((user: UserI) => {
-  //     if (user) {
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   }),
-  // );
-
-  // @Get()
-  // findAll() {}
-
-  // @Post()
-  // login() {}
+  @Get()
+  async findAll(
+    @Query('page') page = 1,
+    @Query('limit') limit = 10,
+  ): Promise<Pagination<UserI>> {
+    limit = limit > 100 ? 100 : limit;
+    return this.userService.findAll({
+      page,
+      limit,
+      route: 'http://localhost:3000/api/users',
+    });
+  }
 }

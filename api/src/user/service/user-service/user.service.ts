@@ -4,7 +4,9 @@ import { from, map, Observable, switchMap } from 'rxjs';
 import { UserEntity } from '../../model/user.entity';
 import { UserI } from 'src/user/model/user.interface';
 import { Repository } from 'typeorm';
+import { IPaginationOptions, paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { CreateUserDto } from 'src/user/model/dto/create-user.dto';
+import { AuthService } from 'src/auth/auth/service/auth.service';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require('bcrypt');
@@ -14,15 +16,8 @@ export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    private authService: AuthService,
   ) {}
-
-  createUserDtoToEntity(createUserDto: CreateUserDto): UserI {
-    return {
-      email: createUserDto.email,
-      username: createUserDto.username,
-      password: createUserDto.password,
-    };
-  }
 
   async create(newUser: UserI): Promise<UserI> {
     try {
@@ -42,66 +37,17 @@ export class UserService {
     }
   }
 
-  // create(newUser: UserI): Observable<UserI> {
-  //   return this.mailExists(newUser.email).pipe(
-  //     switchMap((exists: boolean) => {
-  //       if (!exists) {
-  //         return this.hashPassword(newUser.password).pipe(
-  //           switchMap((passwordHash: string) => {
-  //             //overwrite the user password with the hash, to store thash in the database
-  //             newUser.password = passwordHash;
-  //             return from(this.userRepository.save(newUser)).pipe(
-  //               switchMap((user: UserI) => this.findOne(user.id)),
-  //             );
-  //           }),
-  //         );
-  //       }
-  //     }),
-  //   );
-  // }
-
-  // create(newUser: UserI): Observable<UserI> {
-  //   return this.mailExists(newUser.email).pipe(
-  //     switchMap((exists: boolean) => {
-  //       if (exists === true) {
-  //         return this.hashPassword(newUser.password).pipe(
-  //           switchMap((passwordHash: string) => {
-  //             //overwite the user password with the hash, to store the hash in the database
-  //             newUser.password = passwordHash;
-  //             return from(this.userRepository.save(newUser)).pipe(
-  //               switchMap((user: UserI) => this.findOne(user.id)),
-  //             );
-  //           }),
-  //         );
-  //       } else {
-  //         throw new HttpException(
-  //           'Email is already in use',
-  //           HttpStatus.CONFLICT,
-  //         );
-  //       }
-  //     }),
-  //   );
-  // }
-
-  private hashPassword(password: string): Observable<string> {
-    return from<string>(bcrypt.hash(password, 12));
+  async findAll(options: IPaginationOptions): Promise<Pagination<UserI>> {
+    return paginate<UserEntity>(this.userRepository, options);
   }
 
-  private findOne(id: number): Observable<UserI> {
-    return from(this.userRepository.findOne(id));
+  private async hashPassword(password: string): Promise<string> {
+    return this.authService.hashPassword(password);
   }
 
-  // private mailExists(email: string): Observable<boolean> {
-  //   return from(this.userRepository.findOne({ email })).pipe(
-  //     map((user: UserI) => {
-  //       if (user) {
-  //         return true;
-  //       } else {
-  //         return false;
-  //       }
-  //     }),
-  //   );
-  // }
+  private async findOne(id: number): Promise<UserI> {
+    return this.userRepository.findOne({ id });
+  }
 
   private async mailExists(email: string): Promise<boolean> {
     const user = await this.userRepository.findOne({ email });
