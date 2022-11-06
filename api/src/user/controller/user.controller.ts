@@ -10,6 +10,7 @@ import {
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { Observable, of, switchMap, from } from 'rxjs';
 import { CreateUserDto } from '../model/dto/create-user.dto';
+import { LoginUserDto } from '../model/dto/login-user.dto';
 import { UserI } from '../model/user.interface';
 import { UserHelperService } from '../service/user-helper/user-helper.service';
 import { UserService } from '../service/user-service/user.service';
@@ -39,5 +40,11 @@ export class UserController {
       limit,
       route: 'http://localhost:3000/api/users',
     });
+  }
+
+  @Post('login')
+  async login(@Body() loginUserDto: LoginUserDto): Promise<boolean> {
+    const userEntity: UserI = this.userHelperService.loginUserDtoToEntity(loginUserDto);
+    return userEntity;
   }
 }

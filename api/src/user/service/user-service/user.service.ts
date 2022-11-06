@@ -4,7 +4,11 @@ import { from, map, Observable, switchMap } from 'rxjs';
 import { UserEntity } from '../../model/user.entity';
 import { UserI } from 'src/user/model/user.interface';
 import { Repository } from 'typeorm';
-import { IPaginationOptions, paginate, Pagination } from 'nestjs-typeorm-paginate';
+import {
+  IPaginationOptions,
+  paginate,
+  Pagination,
+} from 'nestjs-typeorm-paginate';
 import { CreateUserDto } from 'src/user/model/dto/create-user.dto';
 import { AuthService } from 'src/auth/auth/service/auth.service';
 
@@ -37,12 +41,65 @@ export class UserService {
     }
   }
 
+  async login(user: UserI): Promise<boolean> {
+    try {
+      const foundUser: UserI = await this.findByEmail(user.email.toLowerCase());
+      if (foundUser) {
+        const matches: boolean = await this.validatePassword(
+          user.password,
+          foundUser.password,
+        );
+        if (matches) {
+          const payload: UserI = await this.findOne(foundUser.id);
+          //return this.findOne(foundUser.id).pipe(map(true))
+          if (payload) {
+            return true;
+          } else {
+            throw new HttpException(
+              'Login was not successfull, wrong credentials',
+              HttpStatus.UNAUTHORIZED,
+            );
+          }
+        } else {
+          throw new HttpException(
+            'Login was not successfull, wrong credentials',
+            HttpStatus.UNAUTHORIZED,
+          );
+        }
+      } else {
+        throw new HttpException(
+          'Login was not sucessful, wrong credentials',
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+    } catch {
+      throw new HttpException(
+        'Login was not successfull, wrong credentials',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+  }
+
   async findAll(options: IPaginationOptions): Promise<Pagination<UserI>> {
     return paginate<UserEntity>(this.userRepository, options);
   }
 
+  private async findByEmail(email: string): Promise<UserI> {
+    return this.userRepository.findOne(
+      { email },
+      { select: ['id', 'email', 'username', 'password'] },
+    );
+  }
+
   private async hashPassword(password: string): Promise<string> {
     return this.authService.hashPassword(password);
+  }
+
+  private async validatePassword(
+    password: string,
+    storedPasswordHash: string,
+  ): Promise<any> {
+    return;
   }
 
   private async findOne(id: number): Promise<UserI> {
