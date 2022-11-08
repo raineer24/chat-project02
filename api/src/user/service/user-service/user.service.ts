@@ -10,7 +10,7 @@ import {
   Pagination,
 } from 'nestjs-typeorm-paginate';
 import { CreateUserDto } from 'src/user/model/dto/create-user.dto';
-import { AuthService } from 'src/auth/auth/service/auth.service';
+import { AuthService } from 'src/auth/service/auth.service';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require('bcrypt');

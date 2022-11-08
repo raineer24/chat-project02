@@ -44,7 +44,8 @@ export class UserController {
 
   @Post('login')
   async login(@Body() loginUserDto: LoginUserDto): Promise<boolean> {
-    const userEntity: UserI = this.userHelperService.loginUserDtoToEntity(loginUserDto);
-    return userEntity;
+    // const userEntity: UserI =
+    //   this.userHelperService.loginUserDtoToEntity(loginUserDto);
+    return this.userHelperService.loginUserDtoToEntity(loginUserDto);
   }
 }
