@@ -41,7 +41,7 @@ export class UserService {
     }
   }
 
-  async login(user: UserI): Promise<boolean> {
+  async login(user: UserI): Promise<string> {
     try {
       const foundUser: UserI = await this.findByEmail(user.email.toLowerCase());
       if (foundUser) {
@@ -51,15 +51,7 @@ export class UserService {
         );
         if (matches) {
           const payload: UserI = await this.findOne(foundUser.id);
-          //return this.findOne(foundUser.id).pipe(map(true))
-          if (payload) {
-            return true;
-          } else {
-            throw new HttpException(
-              'Login was not successfull, wrong credentials',
-              HttpStatus.UNAUTHORIZED,
-            );
-          }
+          return this.authService.generateJwt(payload);
         } else {
           throw new HttpException(
             'Login was not successfull, wrong credentials',

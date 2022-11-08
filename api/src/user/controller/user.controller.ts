@@ -11,6 +11,7 @@ import { Pagination } from 'nestjs-typeorm-paginate';
 import { Observable, of, switchMap, from } from 'rxjs';
 import { CreateUserDto } from '../model/dto/create-user.dto';
 import { LoginUserDto } from '../model/dto/login-user.dto';
+import { LoginResponseI } from '../model/login-response.interface';
 import { UserI } from '../model/user.interface';
 import { UserHelperService } from '../service/user-helper/user-helper.service';
 import { UserService } from '../service/user-service/user.service';
@@ -43,9 +44,14 @@ export class UserController {
   }
 
   @Post('login')
-  async login(@Body() loginUserDto: LoginUserDto): Promise<boolean> {
-    // const userEntity: UserI =
-    //   this.userHelperService.loginUserDtoToEntity(loginUserDto);
-    return this.userHelperService.loginUserDtoToEntity(loginUserDto);
+  async login(@Body() loginUserDto: LoginUserDto): Promise<LoginResponseI> {
+    const userEntity: UserI =
+      this.userHelperService.loginUserDtoToEntity(loginUserDto);
+    const jwt: string = await this.userService.login(userEntity);
+    return {
+      access_token: jwt,
+      token_type: 'JWT',
+      expires_in: 10000,
+    };
   }
 }
