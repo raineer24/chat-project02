@@ -51,6 +51,7 @@ export class UserService {
         );
         if (matches) {
           const payload: UserI = await this.findOne(foundUser.id);
+          console.log('payload', payload);
           return this.authService.generateJwt(payload);
         } else {
           throw new HttpException(
@@ -60,17 +61,42 @@ export class UserService {
         }
       } else {
         throw new HttpException(
-          'Login was not sucessful, wrong credentials',
+          'Login was not successfull, wrong credentials',
           HttpStatus.UNAUTHORIZED,
         );
       }
     } catch {
-      throw new HttpException(
-        'Login was not successfull, wrong credentials',
-        HttpStatus.UNAUTHORIZED,
-      );
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
   }
+
+  // async login(user: UserI): Promise<string> {
+  //   try {
+  //     const foundUser: UserI = await this.findByEmail(user.email.toLowerCase());
+  //     if (foundUser) {
+  //       const matches: boolean = await this.validatePassword(
+  //         user.password,
+  //         foundUser.password,
+  //       );
+  //       if (matches) {
+  //         const payload: UserI = await this.findOne(foundUser.id);
+  //         return this.authService.generateJwt(payload);
+  //       } else {
+  //         throw new HttpException(
+  //           'LOGIN was not successfull, wrong credentials',
+  //           HttpStatus.UNAUTHORIZED,
+  //         );
+  //       }
+  //     } else {
+  //       throw new HttpException(
+  //         'LoginS was not sucessful, wrong credentials',
+  //         HttpStatus.UNAUTHORIZED,
+  //       );
+  //     }
+  //   } catch {
+  //     throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+  //   }
+  // }
 
   async findAll(options: IPaginationOptions): Promise<Pagination<UserI>> {
     return paginate<UserEntity>(this.userRepository, options);
@@ -91,7 +117,7 @@ export class UserService {
     password: string,
     storedPasswordHash: string,
   ): Promise<any> {
-    return;
+    return this.authService.comparePasswords(password, storedPasswordHash);
   }
 
   private async findOne(id: number): Promise<UserI> {
