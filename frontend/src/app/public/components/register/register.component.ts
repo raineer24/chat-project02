@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CustomValidators } from '../../_helpers/custom-validators';
-
+import { UserService } from '../../services/user-service/user.service';
+import { Router } from '@angular/router';
+import { tap } from 'rxjs/operators';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -18,9 +20,19 @@ export class RegisterComponent{
     validators: CustomValidators.passwordsMatching
   })
 
-  constructor() { }
+  constructor(private userService: UserService, private router: Router) { }
 
-  register() {}
+  register() {
+    if (this.form.valid) {
+      this.userService.create({
+        email: this.email.value,
+        password: this.password.value,
+        username: this.username.value
+      }).pipe(
+        tap(() => this.router.navigate(['../login']))
+      ).subscribe();
+    }
+  }
 
   get email(): FormControl{
     return this.form.get('email') as FormControl;
