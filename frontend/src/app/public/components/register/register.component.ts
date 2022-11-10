@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { CustomValidators } from '../../_helpers/custom-validators';
 
 @Component({
   selector: 'app-register',
@@ -13,6 +14,8 @@ export class RegisterComponent{
     username: new FormControl(null, [Validators.required]),
     password: new FormControl(null, [Validators.required]),
     passwordConfirm: new FormControl(null, [Validators.required]),
+  }, {
+    validators: CustomValidators.passwordsMatching
   })
 
   constructor() { }
@@ -29,6 +32,10 @@ export class RegisterComponent{
 
   get password(): FormControl {
     return this.form.get('password') as FormControl;
+  }
+
+  get passwordConfirm(): FormControl { 
+    return this.form.get('passwordConfirm') as FormControl;
   }
 
 }
