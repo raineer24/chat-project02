@@ -24,5 +24,10 @@ export class AuthService {
     );
   }
 
+  getLoggedInUser() {
+    const decodedTOken = this.jwtService.decodeToken();
+    return decodedTOken.user;
+  }
+
   
 }
