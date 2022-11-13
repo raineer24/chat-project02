@@ -69,35 +69,6 @@ export class UserService {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
   }
-
-  // async login(user: UserI): Promise<string> {
-  //   try {
-  //     const foundUser: UserI = await this.findByEmail(user.email.toLowerCase());
-  //     if (foundUser) {
-  //       const matches: boolean = await this.validatePassword(
-  //         user.password,
-  //         foundUser.password,
-  //       );
-  //       if (matches) {
-  //         const payload: UserI = await this.findOne(foundUser.id);
-  //         return this.authService.generateJwt(payload);
-  //       } else {
-  //         throw new HttpException(
-  //           'LOGIN was not successfull, wrong credentials',
-  //           HttpStatus.UNAUTHORIZED,
-  //         );
-  //       }
-  //     } else {
-  //       throw new HttpException(
-  //         'LoginS was not sucessful, wrong credentials',
-  //         HttpStatus.UNAUTHORIZED,
-  //       );
-  //     }
-  //   } catch {
-  //     throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-  //   }
-  // }
-
   async findAll(options: IPaginationOptions): Promise<Pagination<UserI>> {
     return paginate<UserEntity>(this.userRepository, options);
   }
@@ -122,6 +93,10 @@ export class UserService {
 
   private async findOne(id: number): Promise<UserI> {
     return this.userRepository.findOne({ id });
+  }
+
+  public getOne(id: number): Promise<UserI> {
+    return this.userRepository.findOneOrFail({ id });
   }
 
   private async mailExists(email: string): Promise<boolean> {
