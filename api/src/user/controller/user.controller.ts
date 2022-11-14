@@ -31,7 +31,6 @@ export class UserController {
     return this.userService.create(userEntity);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get()
   async findAll(
     @Query('page') page = 1,
