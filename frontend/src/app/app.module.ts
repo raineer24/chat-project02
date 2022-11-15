@@ -10,10 +10,32 @@ import { JwtModule } from '@auth0/angular-jwt';
 
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
-const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
+
 export function tokenGetter() {
   return localStorage.getItem("nestjs_chat_app");
 }
+
+const config: SocketIoConfig = { url: 'http://localhost:3000', options: {
+  transportOptions: {
+    polling: {
+      extraHeaders: {
+        Authorization: tokenGetter()
+      },
+    },
+  },
+}};
+
+// const socket = io('http://localhost:3000', {
+//   transportOptions: {
+//     polling: {
+//       extraHeaders: {
+//         'Authorization': 'Bearer abc',
+//       },
+//     },
+//   },
+// });
+
+
 
 @NgModule({
   declarations: [

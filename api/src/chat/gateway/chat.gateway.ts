@@ -31,9 +31,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   async handleConnection(socket: Socket) {
     try {
-      const decodedToken = await this.authService.verifyJwt(
-        socket.handshake.headers.authorization,
-      );
+      // eslint-disable-next-line prettier/prettier
+      const decodedToken = await this.authService.verifyJwt(socket.handshake.headers.authorization);
       const user: UserI = await this.userService.getOne(decodedToken.user.id);
       if (!user) {
         return this.disconnect(socket);
