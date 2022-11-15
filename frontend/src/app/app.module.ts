@@ -15,25 +15,6 @@ export function tokenGetter() {
   return localStorage.getItem("nestjs_chat_app");
 }
 
-const config: SocketIoConfig = { url: 'http://localhost:3000', options: {
-  transportOptions: {
-    polling: {
-      extraHeaders: {
-        Authorization: tokenGetter()
-      },
-    },
-  },
-}};
-
-// const socket = io('http://localhost:3000', {
-//   transportOptions: {
-//     polling: {
-//       extraHeaders: {
-//         'Authorization': 'Bearer abc',
-//       },
-//     },
-//   },
-// });
 
 
 
@@ -52,7 +33,7 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {
         tokenGetter: tokenGetter,
         allowedDomains: ['localhost:3000']
       }
-    }),SocketIoModule.forRoot(config)
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
