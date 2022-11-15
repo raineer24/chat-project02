@@ -7,9 +7,16 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { JwtModule } from '@auth0/angular-jwt';
+
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+
+
 export function tokenGetter() {
   return localStorage.getItem("nestjs_chat_app");
 }
+
+
+
 
 @NgModule({
   declarations: [
