@@ -21,9 +21,25 @@ export class RoomService {
     return this.roomRepository.save(newRoom);
   }
 
-  async getRoom() {}
+  async getRoom(roomId: number): Promise<RoomI> {
+    return this.roomRepository.findOne(roomId, {
+      relations: ['users'],
+    });
+  }
 
-  async getRoomsForUser() {}
+  async getRoomsForUser(
+    userId: number,
+    options: IPaginationOptions,
+  ): Promise<Pagination<RoomI>> {
+    const query = this.roomRepository
+      .createQueryBuilder('room')
+      .leftJoin('room.users', 'users')
+      .where('users.id = :userId', { userId })
+      .leftJoinAndSelect('room.users', 'all_users')
+      .orderBy('room.updated_at', 'DESC');
+
+    return paginate(query, options);
+  }
 
   async addCreatorToRoom(room: RoomI, creator: UserI): Promise<RoomI> {
     room.users.push(creator);
