@@ -10,4 +10,23 @@ import { RoomI } from 'src/chat/model/room/room.interface';
 import { UserI } from 'src/user/model/user.interface';
 import { Repository } from 'typeorm';
 @Injectable()
-export class RoomService {}
+export class RoomService {
+  constructor(
+    @InjectRepository(RoomEntity)
+    private readonly roomRepository: Repository<RoomEntity>,
+  ) {}
+
+  async createRoom(room: RoomI, creator: UserI): Promise<RoomI> {
+    const newRoom = await this.addCreatorToRoom(room, creator);
+    return this.roomRepository.save(newRoom);
+  }
+
+  async getRoom() {}
+
+  async getRoomsForUser() {}
+
+  async addCreatorToRoom(room: RoomI, creator: UserI): Promise<RoomI> {
+    room.users.push(creator);
+    return room;
+  }
+}
