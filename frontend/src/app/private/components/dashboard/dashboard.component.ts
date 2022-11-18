@@ -7,11 +7,12 @@ import { ChatService } from '../../services/chat-service/chat.service';
 })
 export class DashboardComponent{
 
-  title = this.chatService.getMessage();
+ rooms$ = this.chatService.getMyRooms();
 
   constructor(private chatService: ChatService) { }
 
   ngOnInit(): void {
+    this.chatService.createRoom();
   }
 
 }
