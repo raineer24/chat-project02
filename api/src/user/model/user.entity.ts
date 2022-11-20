@@ -22,7 +22,8 @@ export class UserEntity {
   @Column({ select: false })
   password: string;
 
-  @ManyToMany(() => RoomEntity, (room) => room.users)
+  // eslint-disable-next-line prettier/prettier
+  @ManyToMany(() => RoomEntity, room => room.users)
   rooms: RoomEntity[];
 
   @BeforeInsert()

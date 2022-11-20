@@ -43,6 +43,6 @@ export class RoomService {
 
   async addCreatorToRoom(room: RoomI, creator: UserI): Promise<RoomI> {
     room.users.push(creator);
-    return room;
+    return await room;
   }
 }

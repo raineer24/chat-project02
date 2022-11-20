@@ -10,6 +10,7 @@ import { Socket, Server } from 'socket.io';
 import { AuthService } from 'src/auth/service/auth.service';
 import { UserI } from 'src/user/model/user.interface';
 import { UserService } from 'src/user/service/user-service/user.service';
+import { PageI } from '../model/page.interface';
 import { RoomI } from '../model/room/room.interface';
 import { RoomService } from '../service/room-service/room/room.service';
 
@@ -65,6 +66,18 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('createRoom')
   async onCreateRoom(socket: Socket, room: RoomI): Promise<RoomI> {
+    console.log(socket.data.user);
+    console.log(room.users);
     return this.roomService.createRoom(room, socket.data.user);
+  }
+
+  @SubscribeMessage('paginateRoom')
+  async onPaginateRoom(socket: Socket, page: PageI) {
+    page.limit = page.limit > 100 ? 100 : page.limit;
+    const rooms = await this.roomService.getRoomsForUser(
+      socket.data.user.id,
+      page,
+    );
+    return this.server.to(socket.id).emit('rooms', rooms);
   }
 }
