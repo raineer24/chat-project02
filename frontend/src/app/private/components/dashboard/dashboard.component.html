@@ -4,7 +4,7 @@
       
       <div>
         <h1>My chatrooms</h1>
-        <button>Create new Room</button>
+        <button mat-button [routerLink]="['../create-room']">Create new Room</button>
         <mat-selection-list [multiple]="false" (selectionChange)="onSelectRoom($event)">
           <mat-list-option
             *ngFor="let room of (rooms$ | async)?.items"
@@ -23,8 +23,9 @@
         </mat-paginator>
       </div>
      
-      <div>
+      <div style="margin-left: 40px;">
         <h1>My rooms</h1>
+        {{ selectedRoom | json}}
       </div>
    
     </div>

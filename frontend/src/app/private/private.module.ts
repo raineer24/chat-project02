@@ -7,10 +7,12 @@ import {MatListModule} from '@angular/material/list';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { CreateRoomComponent } from './components/create-room/create-room.component';
 
 @NgModule({
   declarations: [
-    DashboardComponent
+    DashboardComponent,
+    CreateRoomComponent
   ],
   imports: [
     CommonModule,
