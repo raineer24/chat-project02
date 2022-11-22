@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { ChatService } from '../../services/chat-service/chat.service';
 @Component({
   selector: 'app-dashboard',
@@ -13,6 +14,12 @@ export class DashboardComponent{
 
   ngOnInit(): void {
     this.chatService.createRoom();
+  }
+
+  onSelectRoom() {}
+
+  onPaginateRooms(pageEvent: PageEvent) {
+   this.chatService.emitPaginateRooms(pageEvent.pageSize, pageEvent.pageIndex);
   }
 
 }
