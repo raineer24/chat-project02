@@ -8,7 +8,7 @@ const routes: Routes = [
     path: 'dashboard',
     component: DashboardComponent
   }, {
-    path: 'create-rom',
+    path: 'create-room',
     component: CreateRoomComponent
   },
   {
