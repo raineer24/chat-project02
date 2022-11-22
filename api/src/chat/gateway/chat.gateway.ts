@@ -36,7 +36,9 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   async handleConnection(socket: Socket) {
     try {
       // eslint-disable-next-line prettier/prettier
-      const decodedToken = await this.authService.verifyJwt(socket.handshake.headers.authorization);
+      const decodedToken = await this.authService.verifyJwt(
+        socket.handshake.headers.authorization,
+      );
       const user: UserI = await this.userService.getOne(decodedToken.user.id);
       if (!user) {
         return this.disconnect(socket);
@@ -46,6 +48,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
           page: 1,
           limit: 10,
         });
+        // substract page -1 to match the angular material paginator
+        rooms.meta.currentPage = rooms.meta.currentPage - 1;
         //only lemit rooms to the specific connected client
         return this.server.to(socket.id).emit('rooms', rooms);
       }
@@ -71,7 +75,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     return this.roomService.createRoom(room, socket.data.user);
   }
 
-  @SubscribeMessage('paginateRoom')
+  @SubscribeMessage('paginateRooms')
   async onPaginateRoom(socket: Socket, page: PageI) {
     page.limit = page.limit > 100 ? 100 : page.limit;
     const rooms = await this.roomService.getRoomsForUser(

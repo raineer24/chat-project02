@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSelectionListChange } from '@angular/material/list';
 import { PageEvent } from '@angular/material/paginator';
 import { ChatService } from '../../services/chat-service/chat.service';
 @Component({
@@ -9,6 +10,7 @@ import { ChatService } from '../../services/chat-service/chat.service';
 export class DashboardComponent{
 
  rooms$ = this.chatService.getMyRooms();
+ selectedRoom = null
 
   constructor(private chatService: ChatService) { }
 
@@ -16,7 +18,9 @@ export class DashboardComponent{
     this.chatService.createRoom();
   }
 
-  onSelectRoom() {}
+  onSelectRoom(event: MatSelectionListChange) {
+    this.selectedRoom = event.source.selectedOptions.selected[0].value;
+  }
 
   onPaginateRooms(pageEvent: PageEvent) {
    this.chatService.emitPaginateRooms(pageEvent.pageSize, pageEvent.pageIndex);
