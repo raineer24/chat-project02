@@ -14,8 +14,9 @@ import { MatInputModule } from '@angular/material/input';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatIconModule} from '@angular/material/icon';
+import { SelectUsersComponent } from './components/select-users/select-users.component';
 @NgModule({
-  declarations: [DashboardComponent, CreateRoomComponent],
+  declarations: [DashboardComponent, CreateRoomComponent, SelectUsersComponent],
   imports: [
     CommonModule,
     PrivateRoutingModule,
