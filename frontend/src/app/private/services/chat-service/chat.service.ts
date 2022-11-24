@@ -5,6 +5,7 @@ import { RoomI, RoomPaginateI } from 'src/app/model/room.interface';
 import { UserI } from 'src/app/model/user.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ThisReceiver } from '@angular/compiler';
+import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
@@ -17,7 +18,7 @@ export class ChatService {
     return this.socket.fromEvent('message');
   }
 
-  getMyRooms() {
+  getMyRooms(): Observable<RoomPaginateI> {
     return this.socket.fromEvent<RoomPaginateI>('rooms');
   }
 
