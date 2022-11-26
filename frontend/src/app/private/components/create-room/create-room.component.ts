@@ -20,10 +20,16 @@ export class CreateRoomComponent{
 
   create() {}
 
-  get name(): FormControl {}
+  get name(): FormControl {
+    return this.form.get('name') as FormControl;
+  }
 
-  get name(): FormControl {}
+  get description(): FormControl {
+    return this.form.get('description') as FormControl;
+  }
 
-  get name(): FormArray {}
+  get users(): FormArray {
+    return this.form.get('users') as FormArray;
+  }
 
 }
