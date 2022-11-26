@@ -15,6 +15,10 @@ import { UserService } from 'src/app/public/services/user-service/user.service';
   styleUrls: ['./select-users.component.scss'],
 })
 export class SelectUsersComponent implements OnInit {
+
+  @Input() users: UserI[] = [];
+  @Output() addUser: EventEmitter<UserI> = new EventEmitter<UserI>();
+  
   constructor() {}
 
   ngOnInit(): void {}
