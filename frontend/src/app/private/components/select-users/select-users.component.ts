@@ -36,4 +36,12 @@ export class SelectUsersComponent implements OnInit {
       ))
     ).subscribe();
   }
+
+  displayFn(user: UserI) {
+    if(user) {
+      return user.username;
+    } else {
+      return '';
+    }
+  }
 }
