@@ -18,8 +18,22 @@ export class SelectUsersComponent implements OnInit {
 
   @Input() users: UserI[] = [];
   @Output() addUser: EventEmitter<UserI> = new EventEmitter<UserI>();
-  
-  constructor() {}
+  @Output() removeUser: EventEmitter<UserI> = new EventEmitter<UserI>();
 
-  ngOnInit(): void {}
+  searchUsername = new FormControl();
+  filteredUsers: UserI[] = [];
+  selectedUser: UserI = null;
+  
+  
+  constructor(private userService: UserService) { }
+
+  ngOnInit(): void {
+    this.searchUsername.valueChanges.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      switchMap((username: string) => this.userService.findByUsername(username).pipe(
+        tap((users: UserI[]) => this.filteredUsers = users)
+      ))
+    ).subscribe();
+  }
 }
