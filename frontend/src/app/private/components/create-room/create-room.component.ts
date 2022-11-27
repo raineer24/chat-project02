@@ -20,6 +20,22 @@ export class CreateRoomComponent{
 
   create() {}
 
+  initUser(user: UserI) {
+    return new FormControl({
+      id: user.id,
+      username: user.username,
+      email: user.email,
+    })
+  }
+
+  addUser(UserFormControl: FormControl) {
+    this.users.push(UserFormControl);
+  }
+
+  removeUser() {
+
+  }
+
   get name(): FormControl {
     return this.form.get('name') as FormControl;
   }
