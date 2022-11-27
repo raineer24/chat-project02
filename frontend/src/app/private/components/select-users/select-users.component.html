@@ -1,6 +1,6 @@
 <mat-form-field>
     <input matInput placeholder="Search User by Username" [matAutocomplete]="auto" [formControl]="searchUsername">
-    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="setSelectedUser($event.option.value)">
         <ng-container>
             <mat-option *ngFor="let user of filteredUsers" [value]="user">
                 <span>{{user.username}}</span>
@@ -9,3 +9,4 @@
         </ng-container>
     </mat-autocomplete>
 </mat-form-field>
+<button mat-button type="button" [disabled]="!selectedUser" (click)="addUserToForm()">Add User</button>

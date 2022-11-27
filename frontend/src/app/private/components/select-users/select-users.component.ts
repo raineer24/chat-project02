@@ -1,3 +1,4 @@
+import { ThisReceiver } from '@angular/compiler';
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import {
@@ -35,6 +36,17 @@ export class SelectUsersComponent implements OnInit {
         tap((users: UserI[]) => this.filteredUsers = users)
       ))
     ).subscribe();
+  }
+
+  addUserToForm() {
+    this.addUser.emit(this.selectedUser);
+    this.filteredUsers = [];
+    this.selectedUser = null;
+    this.searchUsername.setValue(null);
+  }
+
+  setSelectedUser(user: UserI) {
+    this.selectedUser = user;
   }
 
   displayFn(user: UserI) {
