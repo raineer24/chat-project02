@@ -32,8 +32,8 @@ export class CreateRoomComponent{
     this.users.push(UserFormControl);
   }
 
-  removeUser() {
-
+  removeUser(userId: number) {
+    this.users.removeAt(this.users.value.findIndex((user: UserI) => user.id === userId));
   }
 
   get name(): FormControl {

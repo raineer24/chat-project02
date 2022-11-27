@@ -45,6 +45,10 @@ export class SelectUsersComponent implements OnInit {
     this.searchUsername.setValue(null);
   }
 
+  removeUserFromForm(user: UserI) {
+    this.removeUser.emit(user);
+  }
+
   setSelectedUser(user: UserI) {
     this.selectedUser = user;
   }

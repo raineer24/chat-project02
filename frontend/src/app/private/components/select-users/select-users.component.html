@@ -28,8 +28,9 @@
 </button>
 
 <mat-chip-list *ngIf="users.length > 0; else no_users">
-  <mat-chip *ngFor="let user of users">
+  <mat-chip *ngFor="let user of users" (removed)="removeUserFromForm(user)">
     {{ user.username }}
+    <mat-icon matChipRemove>cancel</mat-icon>
   </mat-chip>
 </mat-chip-list>
 
