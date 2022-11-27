@@ -29,7 +29,7 @@
               />
             </mat-form-field>
 
-            <app-select-users [users]="users.value" (addUser)="initUser($event)"></app-select-users>
+            <app-select-users [users]="users.value" (addUser)="addUser(initUser($event))"></app-select-users>
 
             <mat-hint>Please fill out all needed information</mat-hint>
 
