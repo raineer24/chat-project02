@@ -12,7 +12,7 @@ import { UserI } from 'src/user/model/user.interface';
 import { UserService } from 'src/user/service/user-service/user.service';
 import { PageI } from '../model/page.interface';
 import { RoomI } from '../model/room/room.interface';
-import { RoomService } from '../service/room-service/room/room.service';
+import { RoomService } from '../service/room-service/room.service';
 
 @WebSocketGateway({
   cors: [
