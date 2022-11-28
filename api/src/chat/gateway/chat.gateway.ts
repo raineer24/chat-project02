@@ -12,6 +12,7 @@ import { UserI } from 'src/user/model/user.interface';
 import { UserService } from 'src/user/service/user-service/user.service';
 import { PageI } from '../model/page.interface';
 import { RoomI } from '../model/room/room.interface';
+import { ConnectedUserService } from '../service/connected-user/connected-user.service';
 import { RoomService } from '../service/room-service/room.service';
 
 @WebSocketGateway({
@@ -31,6 +32,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private authService: AuthService,
     private userService: UserService,
     private roomService: RoomService,
+    private connectedUserService: ConnectedUserService,
   ) {}
 
   async handleConnection(socket: Socket) {
@@ -51,6 +53,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         // substract page -1 to match the angular material paginator
         // eslint-disable-next-line prettier/prettier
         rooms.meta.currentPage = rooms.meta.currentPage -1;
+        // Save connection to DB
+        await this.connectedUserService.create({ socketId: socket.id, user });
         //only lemit rooms to the specific connected client
         return this.server.to(socket.id).emit('rooms', rooms);
       }
