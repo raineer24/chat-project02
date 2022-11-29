@@ -52,7 +52,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         });
         // substract page -1 to match the angular material paginator
         // eslint-disable-next-line prettier/prettier
-        rooms.meta.currentPage = rooms.meta.currentPage -1;
+        rooms.meta.currentPage = rooms.meta.currentPage - 1;
         // Save connection to DB
         await this.connectedUserService.create({ socketId: socket.id, user });
         //only lemit rooms to the specific connected client
@@ -63,8 +63,10 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
-  handleDisconnect(socket: Socket) {
+  async handleDisconnect(socket: Socket) {
     console.log('On Disconnect');
+    // remove connection from DB
+    await this.connectedUserService.deleteBySocketId(socket.id);
     socket.disconnect();
   }
 
@@ -74,10 +76,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('createRoom')
-  async onCreateRoom(socket: Socket, room: RoomI): Promise<RoomI> {
-    console.log(socket.data.user);
-    console.log(room.users);
-    return this.roomService.createRoom(room, socket.data.user);
+  async onCreateRoom(socket: Socket, room: RoomI) {
+    const createRoom: RoomI = await this.roomService.createRoom(
+      room,
+      socket.data.user,
+    );
+    for (const user of createRoom.users) {
+    }
   }
 
   @SubscribeMessage('paginateRooms')
@@ -85,14 +90,14 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     page.limit = page.limit > 100 ? 100 : page.limit;
     // add page +1 to match angular material paginator
     // eslint-disable-next-line prettier/prettier
-    page.page = page.page +1
+    page.page = page.page + 1;
     const rooms = await this.roomService.getRoomsForUser(
       socket.data.user.id,
       page,
     );
     // substract page -1 to match the angular material paginator
     // eslint-disable-next-line prettier/prettier
-        rooms.meta.currentPage = rooms.meta.currentPage -1;
+    rooms.meta.currentPage = rooms.meta.currentPage - 1;
     return this.server.to(socket.id).emit('rooms', rooms);
   }
 }
