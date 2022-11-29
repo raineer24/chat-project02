@@ -10,6 +10,7 @@ import { Socket, Server } from 'socket.io';
 import { AuthService } from 'src/auth/service/auth.service';
 import { UserI } from 'src/user/model/user.interface';
 import { UserService } from 'src/user/service/user-service/user.service';
+import { ConnectedUserI } from '../model/connected-user/connected-user.interface';
 import { PageI } from '../model/page.interface';
 import { RoomI } from '../model/room/room.interface';
 import { ConnectedUserService } from '../service/connected-user/connected-user.service';
@@ -82,6 +83,17 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       socket.data.user,
     );
     for (const user of createRoom.users) {
+      const connections: ConnectedUserI[] =
+        await this.connectedUserService.findByUser(user);
+      const rooms = await this.roomService.getRoomsForUser(user.id, {
+        page: 1,
+        limit: 10,
+      });
+      // substract page -1 to match the angular material paginator
+      rooms.meta.currentPage = rooms.meta.currentPage - 1;
+      for (const connection of connections) {
+        await this.server.to(connection.socketId).emit('rooms', rooms);
+      }
     }
   }
 
