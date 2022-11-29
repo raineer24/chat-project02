@@ -16,7 +16,8 @@ export class ConnectedUserEntity {
   @Column()
   socketId: string;
 
-  @OneToOne(() => UserEntity)
+  // eslint-disable-next-line prettier/prettier
+  @ManyToOne(() => UserEntity, (user) => user.connections)
   @JoinColumn()
   user: UserEntity;
 }
