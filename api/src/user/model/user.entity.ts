@@ -1,4 +1,5 @@
 import { ConnectedUserEntity } from 'src/chat/model/connected-user/connected-user.entity';
+import { JoinedRoomEntity } from 'src/chat/model/joined-room/joined-room.entity';
 import { RoomEntity } from 'src/chat/model/room/room.entity';
 import {
   BeforeInsert,
@@ -30,6 +31,10 @@ export class UserEntity {
   // eslint-disable-next-line prettier/prettier
   @OneToMany(() => ConnectedUserEntity, connection => connection.user)
   connections: ConnectedUserEntity[];
+
+  // eslint-disable-next-line prettier/prettier
+  @OneToMany(() => JoinedRoomEntity, joinedRoom => joinedRoom.room)
+  joinedRooms: JoinedRoomEntity[];
 
   @BeforeInsert()
   @BeforeUpdate()
