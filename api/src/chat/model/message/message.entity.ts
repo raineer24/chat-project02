@@ -19,7 +19,13 @@ export class MessageEntity {
   @Column()
   text: string;
 
-  @ManyToOne(() => UserEntity, user => user.messages)
+  // eslint-disable-next-line prettier/prettier
+  @ManyToOne(() => UserEntity, (user) => user.messages)
+  @JoinTable()
+  user: UserEntity;
+
+  // eslint-disable-next-line prettier/prettier
+  @ManyToOne(() => RoomEntity, room => room.messages)
   @JoinTable()
   room: RoomEntity;
 
