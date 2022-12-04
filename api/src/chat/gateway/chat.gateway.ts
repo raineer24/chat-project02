@@ -124,6 +124,16 @@ export class ChatGateway
     return;
   }
 
+  @SubscribeMessage('leaveRoom')
+  async onLeaveRoom() {
+    return;
+  }
+
+  @SubscribeMessage('addMessage')
+  async onAddMessage(message: Message){
+    return;
+  }
+
   private handleIncomingPageRequest() {
     return;
   }
