@@ -17,12 +17,12 @@ export class JoinedRoomEntity {
   socketId: string;
 
   // eslint-disable-next-line prettier/prettier
-  @ManyToOne(() => UserEntity, user => user.joinedRooms)
+  @ManyToOne(() => UserEntity, (user) => user.joinedRooms)
   @JoinColumn()
   user: UserEntity;
 
   // eslint-disable-next-line prettier/prettier
-  @ManyToOne(() => RoomEntity, room => room.joinedUsers)
+  @ManyToOne(() => RoomEntity, (room) => room.joinedUsers)
   @JoinColumn()
   room: RoomEntity;
 }

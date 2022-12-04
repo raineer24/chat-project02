@@ -22,6 +22,12 @@ import { MessageService } from './service/message/message.service';
       ConnectedUserEntity,
     ]),
   ],
-  providers: [ChatGateway, RoomService, ConnectedUserService, JoinedRoomService, MessageService],
+  providers: [
+    ChatGateway,
+    RoomService,
+    ConnectedUserService,
+    JoinedRoomService,
+    MessageService,
+  ],
 })
 export class ChatModule {}
