@@ -12,6 +12,8 @@ import { AuthService } from 'src/auth/service/auth.service';
 import { UserI } from 'src/user/model/user.interface';
 import { UserService } from 'src/user/service/user-service/user.service';
 import { ConnectedUserI } from '../model/connected-user/connected-user.interface';
+import { JoinedRoomI } from '../model/joined-room/joined-room.interface';
+import { MessageI } from '../model/message/message.interface';
 import { PageI } from '../model/page.interface';
 import { RoomI } from '../model/room/room.interface';
 import { ConnectedUserService } from '../service/connected-user/connected-user.service';
@@ -142,13 +144,25 @@ export class ChatGateway
   }
 
   @SubscribeMessage('leaveRoom')
-  async onLeaveRoom() {
-    return;
+  async onLeaveRoom(socket: Socket) {
+    // remove connection from JoinedRooms
+    await this.joinedRoomService.deleteBySocketId(socket.id);
   }
 
   @SubscribeMessage('addMessage')
-  async onAddMessage(message: Message) {
-    return;
+  async onAddMessage(socket: Socket, message: MessageI) {
+    const createdMessage: MessageI = await this.messageService.create({
+      ...message,
+      user: socket.data.user,
+    });
+    const room: RoomI = await this.roomService.getRoom(createdMessage.room.id);
+    const joinedUsers: JoinedRoomI[] = await this.joinedRoomService.findByRoom(
+      room,
+    );
+    // TODO:Send new message to all joined users of the room (currently online)
+    for (const user of joinedUsers) {
+      await this.server.to(user.socketId).emit('messageAdded', createdMessage);
+    }
   }
 
   private handleIncomingPageRequest(page: PageI) {
