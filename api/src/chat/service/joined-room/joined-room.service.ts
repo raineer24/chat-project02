@@ -13,12 +13,12 @@ export class JoinedRoomService {
     private readonly joinedRoomRepository: Repository<JoinedRoomEntity>,
   ) {}
 
-  async create(joinedRoom: JoinedRoomI) {
+  async create(joinedRoom: JoinedRoomI): Promise<JoinedRoomI> {
     return this.joinedRoomRepository.save(joinedRoom);
   }
 
   async findByUser(user: UserI): Promise<JoinedRoomI[]> {
-    return this.joinedRoomRepository.find({ user });
+    return this.joinedRoomRepository.find({user});
   }
 
   async findByRoom(room: RoomI): Promise<JoinedRoomI[]> {
@@ -26,7 +26,7 @@ export class JoinedRoomService {
   }
 
   async deleteBySocketId(socketId: string) {
-    return;
+    return this.joinedRoomRepository.delete({ socketId });
   }
 
   async deleteAll() {
