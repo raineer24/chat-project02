@@ -9,6 +9,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { JoinedRoomEntity } from '../joined-room/joined-room.entity';
+import { MessageEntity } from '../message/message.entity';
 @Entity()
 export class RoomEntity {
   @PrimaryGeneratedColumn()
@@ -23,6 +25,14 @@ export class RoomEntity {
   @ManyToMany(() => UserEntity)
   @JoinTable()
   users: UserEntity[];
+
+  // eslint-disable-next-line prettier/prettier
+  @OneToMany(() => JoinedRoomEntity, joinedRoom => joinedRoom.room)
+  joinedUsers: JoinedRoomEntity[];
+
+  // eslint-disable-next-line prettier/prettier
+  @OneToMany(() => MessageEntity, message => message.room)
+  messages: MessageEntity[];
 
   @CreateDateColumn()
   created_at: Date;
