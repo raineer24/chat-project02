@@ -26,20 +26,20 @@ export class UserEntity {
   password: string;
 
   // eslint-disable-next-line prettier/prettier
-  @ManyToMany(() => RoomEntity, room => room.users)
+  @ManyToMany(() => RoomEntity, (room) => room.users)
   rooms: RoomEntity[];
 
   // eslint-disable-next-line prettier/prettier
-  @OneToMany(() => ConnectedUserEntity, connection => connection.user)
+  @OneToMany(() => ConnectedUserEntity, (connection) => connection.user)
   connections: ConnectedUserEntity[];
 
   // eslint-disable-next-line prettier/prettier
-  @OneToMany(() => JoinedRoomEntity, joinedRoom => joinedRoom.room)
+  @OneToMany(() => JoinedRoomEntity, (joinedRoom) => joinedRoom.room)
   joinedRooms: JoinedRoomEntity[];
 
-    // eslint-disable-next-line prettier/prettier
-    @OneToMany(() => MessageEntity, message => message.user)
-    messages: MessageEntity[]
+  // eslint-disable-next-line prettier/prettier
+  @OneToMany(() => MessageEntity, (message) => message.user)
+  messages: MessageEntity[];
 
   @BeforeInsert()
   @BeforeUpdate()

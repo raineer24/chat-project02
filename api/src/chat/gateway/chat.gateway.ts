@@ -118,4 +118,13 @@ export class ChatGateway
     rooms.meta.currentPage = rooms.meta.currentPage - 1;
     return this.server.to(socket.id).emit('rooms', rooms);
   }
+
+  @SubscribeMessage('joinRoom')
+  async onJoinRoom() {
+    return;
+  }
+
+  private handleIncomingPageRequest() {
+    return;
+  }
 }
