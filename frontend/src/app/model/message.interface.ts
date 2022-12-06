@@ -10,3 +10,8 @@ export interface MessageI {
     created_at?: Date;
     updated_at?: Date;
 }
+
+export interface MessagePaginateI {
+    items: MessageI[];
+    meta: Meta;
+}

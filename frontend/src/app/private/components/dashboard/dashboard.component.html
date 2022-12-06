@@ -1,41 +1,48 @@
 <div class="container">
   <mat-card>
-    <div style="display: flex; flex-direction: row;">
-      
+    <div style="display: flex; flex-direction: row">
       <div>
-        <h1>My chatrooms</h1>
-        <button mat-button [routerLink]="['../create-room']">Create new Room</button>
-        <span>
-        <mat-selection-list [multiple]="false" (selectionChange)="onSelectRoom($event)">
-          <mat-list-option
-            *ngFor="let room of (rooms$ | async)?.items"
-            [value]="room"
+        <div>
+          <h2>My chatrooms</h2>
+          <button mat-button [routerLink]="['../create-room']">
+            Create new Room
+          </button>
+        </div>
+
+        <div *ngIf="" class="rooms">
+          <mat-selection-list
+            [multiple]="false"
+            (selectionChange)="onSelectRoom($event)"
           >
-            Name: {{ room.name }} Id: {{ room.id }}
-            <mat-divider></mat-divider>
-          </mat-list-option>
-        </mat-selection-list>
-        <mat-paginator>
-          [length]="(rooms$ | async)?.meta?.totalItems"
-          [pageIndex]="(rooms$ | async)?.meta?.currentPage"
-          [pageSize]="(rooms$ | async)?.meta?.itemCount"
-          (page)="onPaginateRooms($event)"
-          [pageSizeOptions]="[10,25,50]"
-        </mat-paginator>
-      </span>
+            <mat-list-option
+              *ngFor="let room of (rooms$ | async)?.items"
+              [value]="room"
+            >
+              Name: {{ room.name }} Id: {{ room.id }}
+              <mat-divider></mat-divider>
+            </mat-list-option>
+          </mat-selection-list>
+          <mat-paginator>
+            [length]="(rooms$ | async)?.meta?.totalItems" [pageIndex]="(rooms$ |
+            async)?.meta?.currentPage" [pageSize]="(rooms$ |
+            async)?.meta?.itemCount" (page)="onPaginateRooms($event)"
+            [pageSizeOptions]="[10,25,50]"
+          </mat-paginator>
+        </div>
       </div>
-     
-      <div style="margin-left: 40px;">
+
+      <div style="margin-left: 40px">
         <h1>My rooms</h1>
-        {{ selectedRoom | json}}
+        {{ selectedRoom | json }}
       </div>
-   
     </div>
   </mat-card>
 </div>
 
 <ng-template>
   <div>
-    <mat-error>No chatrooms for you so far, please create one or get invited</mat-error>
+    <mat-error
+      >No chatrooms for you so far, please create one or get invited</mat-error
+    >
   </div>
 </ng-template>

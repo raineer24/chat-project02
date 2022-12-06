@@ -1,5 +1,17 @@
 .container {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+  min-width: 350px;
+
+  mat-card {
+    positions: fixed;
     margin: 20px;
-    min-width: 350px; }
+
+    .rooms {
+        height: 500px;
+        width: 250;
+        overflow: auto;
+    }
+  }
+}
