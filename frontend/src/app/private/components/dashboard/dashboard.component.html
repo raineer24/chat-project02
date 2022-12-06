@@ -25,13 +25,13 @@
           <mat-paginator>
             [length]="(rooms$ | async)?.meta?.totalItems" [pageIndex]="(rooms$ |
             async)?.meta?.currentPage" [pageSize]="(rooms$ |
-            async)?.meta?.itemCount" (page)="onPaginateRooms($event)"
+            async)?.meta?.itemsPerPage" (page)="onPaginateRooms($event)"
             [pageSizeOptions]="[10,25,50]"
           </mat-paginator>
         </div>
       </div>
 
-      <div style="margin-left: 40px">
+      <div class="chatroom">
         <h1>My rooms</h1>
         {{ selectedRoom | json }}
       </div>
