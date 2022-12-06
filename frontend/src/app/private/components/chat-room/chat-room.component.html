@@ -1,1 +1,5 @@
-<p>chat-room works!</p>
+<div *ngIf="chatRoom; else no_chatroom_selected"></div>
+
+<ng-template #no_chatroom_selected>
+    <mat-error>No Chatroom Selected</mat-error>
+</ng-template>
