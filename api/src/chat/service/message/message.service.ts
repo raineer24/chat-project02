@@ -30,7 +30,7 @@ export class MessageService {
       .leftJoin('message.room', 'room')
       .where('room.id = :roomId', { roomId: room.id })
       .leftJoinAndSelect('message.user', 'user')
-      .orderBy('message.createdAt', 'DESC');
+      .orderBy('message.created_at', 'DESC');
 
     return paginate(query, options);
   }
