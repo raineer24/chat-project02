@@ -1,0 +1,12 @@
+h3 {
+  padding: 0px;
+  padding-top: -10px;
+  margin: 0px;
+}
+.message {
+  background-color: rgb(236, 236, 236);
+  height: 400px;
+  overflow-y: scroll;
+  scrollbar-color: lightgrey darkgrey;
+  scrollbar-width: thin;
+}
