@@ -12,7 +12,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { MessagePaginateI } from 'src/app/model/message.interface';
 import { RoomI } from 'src/app/model/room.interface';
 import { ChatService } from '../../services/chat-service/chat.service';
-
+import { map, startWith, tap } from 'rxjs/operators';
 @Component({
   selector: 'app-chat-room',
   templateUrl: './chat-room.component.html',
@@ -21,7 +21,15 @@ import { ChatService } from '../../services/chat-service/chat.service';
 export class ChatRoomComponent implements OnChanges, OnDestroy, AfterViewInit {
   @Input() chatRoom: RoomI;
 
-  messages$: Observable<MessagePaginateI> = this.chatService.getMessages();
+  messages$: Observable<MessagePaginateI> = this.chatService.getMessages().pipe(
+    map((messagePaginate: MessagePaginateI) => {
+      const items = messagePaginate.items.sort(
+        (a, b) =>
+          new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+      );
+      return messagePaginate;
+    })
+  );
 
   chatMessage: FormControl = new FormControl(null, [Validators.required]);
   constructor(private chatService: ChatService) {}
