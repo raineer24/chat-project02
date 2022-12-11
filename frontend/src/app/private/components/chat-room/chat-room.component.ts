@@ -21,6 +21,17 @@ import { map, startWith, tap } from 'rxjs/operators';
 export class ChatRoomComponent implements OnChanges, OnDestroy, AfterViewInit {
   @Input() chatRoom: RoomI;
 
+    messagesPaginate$: Observable<MessagePaginateI> = combineLatest([this.chatService.getMessages(), this.chatService.getAddedMessage().pipe(startWith(null))]).pipe(
+      map(([messagePaginate, message]) => {
+        if(message) {
+          messagePaginate.items.push(message);
+        }
+        const items = messagePaginate.items.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+        messagePaginate.items = items;
+          return messagePaginate;
+      })
+    )
+
   // messages$: Observable<MessagePaginateI> = this.chatService.getMessages().pipe(
   //   map((messagePaginate: MessagePaginateI) => {
   //     const items = messagePaginate.items.sort(
