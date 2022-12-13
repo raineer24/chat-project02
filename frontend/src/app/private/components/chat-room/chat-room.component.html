@@ -22,7 +22,7 @@
     </div>
 
     <!-- Messages -->
-    <div class="messages">
+    <div #messages class="messages">
       <span *ngFor="let message of (messagesPaginate$ | async)?.items">
         <app-chat-message [message]="message"></app-chat-message>
       </span>
