@@ -17,13 +17,13 @@
       </span>
       <span>
         <h3 style="color: grey">{{ chatRoom.description }}</h3>
-        <span *ngFor="let user of chatRoom.users">{{ user.username }}</span>
+        <span *ngFor="let user of chatRoom.users">{{ user.username }}, </span>
       </span>
     </div>
 
     <!-- Messages -->
-    <div class="messages">
-      <span *ngFor="let message of (messages$ | async)?.items">
+    <div #messages class="messages">
+      <span *ngFor="let message of (messagesPaginate$ | async)?.items">
         <app-chat-message [message]="message"></app-chat-message>
       </span>
     </div>
