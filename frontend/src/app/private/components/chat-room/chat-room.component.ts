@@ -29,7 +29,11 @@ export class ChatRoomComponent implements OnChanges, OnDestroy, AfterViewInit {
     this.chatService.getAddedMessage().pipe(startWith(null)),
   ]).pipe(
     map(([messagePaginate, message]) => {
-      if (message && message.room.id === this.chatRoom.id && !messagePaginate.items.some(m =>m.id === message.id)) {
+      if (
+        message &&
+        message.room.id === this.chatRoom.id &&
+        !messagePaginate.items.some((m) => m.id === message.id)
+      ) {
         messagePaginate.items.push(message);
       }
       const items = messagePaginate.items.sort(
@@ -38,9 +42,9 @@ export class ChatRoomComponent implements OnChanges, OnDestroy, AfterViewInit {
       );
       messagePaginate.items = items;
       return messagePaginate;
-    }), tap(() => this.scrollToBottom())
+    }),
+    tap(() => this.scrollToBottom())
   );
-
   chatMessage: FormControl = new FormControl(null, [Validators.required]);
   constructor(private chatService: ChatService) {}
 
@@ -54,10 +58,11 @@ export class ChatRoomComponent implements OnChanges, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if(this.messagesScroller) {
-      this.scrollToBottom();
-      console.log('scrool to bottom ii');
-    }
+    // if (this.messagesScroller) {
+    //   this.scrollToBottom();
+    //   console.log('scrool to bottom ii');
+    // }
+    this.scrollToBottom();
   }
 
   ngOnDestroy() {
@@ -73,13 +78,9 @@ export class ChatRoomComponent implements OnChanges, OnDestroy, AfterViewInit {
   }
 
   scrollToBottom(): void {
-    try {
-      setTimeout(() => { 
-        console.log('scrool to bottom');
-        this.messagesScroller.nativeElement.scrollTop = this.messagesScroller.nativeElement.scrollHeight }, 1);
-    } catch { }
-
+    setTimeout(() => {
+      this.messagesScroller.nativeElement.scrollTop =
+        this.messagesScroller.nativeElement.scrollHeight;
+    }, 1);
   }
-
-  
 }
